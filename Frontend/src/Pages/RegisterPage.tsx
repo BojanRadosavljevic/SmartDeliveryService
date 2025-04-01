@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BlackLightTheme } from "../CSSComponents/BackgroundThemes";
 import { InputDiv, LoginForm } from "../CSSComponents/FrontPageCSS/FormCSS";
 import { FrontHeader } from "../Outlets/FrontHeader";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Register } from "../Auth/AuthSlice";
+import { AppDispatch } from "../AppStore/store";
+
 
 export function RegisterPage(){
     const [ime,setIme] =useState("");
@@ -10,12 +14,22 @@ export function RegisterPage(){
     const [brojTelefona,setBrojTelefona] =useState("");
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
-    const [dostavljac,setDostavljac] =useState(false);
+    const [dostavljacBool,setDostavljac] =useState(false);
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    async function RegisterForm(ev : React.FormEvent){
+        ev.preventDefault();
+        dispatch(Register({id:"",ime:ime,prezime:prezime,brojTelefona:brojTelefona,username:username,password:password,dostavljacBool:dostavljacBool})).unwrap().then(()=>{
+            navigate("/korisnik");
+        });
+
+    }
     return (
     <BlackLightTheme>
         <div>
             <FrontHeader/>
-            <LoginForm >
+            <LoginForm onSubmit={RegisterForm}>
                 <h1 style={{display:"flex",alignSelf:"center"}}>Register</h1>
                     <div style={{marginBottom:"100px"}}>
                         <InputDiv>

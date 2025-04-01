@@ -1,4 +1,6 @@
 
+using System.Text.Json.Serialization;
+
 namespace DTOs{
     public class RegisterDTO{
         public string id { get; set; }
@@ -7,7 +9,7 @@ namespace DTOs{
         public required string brojTelefona { get; set; }
         public required string username { get; set; }
         public required string password { get; set; }
-        public required Boolean Dostavljac { get; set; }
+        public required bool dostavljacBool { get; set; }
 
     }
 }

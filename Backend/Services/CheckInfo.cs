@@ -14,7 +14,7 @@ namespace Services{
                 return false;
             }
             case "brojTelefona":{
-                if(!string.IsNullOrEmpty(value)&& Regex.IsMatch(value,@"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z")){
+                if(!string.IsNullOrEmpty(value) && Regex.IsMatch(value,@"^\+?[0-9][0-9\s.-]{7,11}$")){
                     return true;
                 }
                 return false;

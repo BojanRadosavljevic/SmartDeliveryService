@@ -22,10 +22,10 @@ namespace Controllers{
 
        [HttpPost]
        [Route("Register")]
-       public async Task<ActionResult<object>> Register(RegisterDTO regDTO){
+       public async Task<ActionResult<object>> Register([FromBody]RegisterDTO regDTO){
             var check = false;
             foreach(PropertyInfo property in regDTO.GetType().GetProperties()){
-                if(property.Name != regDTO.Dostavljac.ToString()){
+                if(property.Name != regDTO.dostavljacBool.ToString()){
                     check = CheckInfo.RegisterCheck(property.Name,property.GetValue(regDTO).ToString());
                     if(check==false){
                         return BadRequest($"{property.Name} ne moze imati vrednost {property.GetValue(regDTO)}");
@@ -40,7 +40,7 @@ namespace Controllers{
             if(obj2!=null){
                 return BadRequest("Vec postoji dostavljac sa tim usernameom");
             }
-            if(regDTO.Dostavljac){
+            if(regDTO.dostavljacBool){
                 var dost = new Dostavljac{
                     id = new Guid(),
                     ime = regDTO.ime,
@@ -96,14 +96,15 @@ namespace Controllers{
             if(CheckInfo.RegisterCheck("password",password)==false){
                 return BadRequest("Los password");
             }
-            var kor = await context.korisnici.Where(x=>x.username==username && x.password==password).FirstOrDefaultAsync();
-            var dost = await context.dostavljaci.Where(x=>x.username==username && x.password==password).FirstOrDefaultAsync();
+            var passwordPom = PasswordCrypting.EncryptPassword(password,username);
+            var kor = await context.korisnici.Where(x=>x.username==username && x.password==passwordPom).FirstOrDefaultAsync();
+            var dost = await context.dostavljaci.Where(x=>x.username==username && x.password==passwordPom).FirstOrDefaultAsync();
             if(kor==null && dost==null){
                 return BadRequest("Ne postoji korisnik ili dostavljac");
             }
             if(kor!=null){
                 string key1="Token";
-                string value = TokenHandling.TokenCreating(kor.id.ToString(),"korinsik");
+                string value = TokenHandling.TokenCreating(kor.id.ToString(),"korisnik");
 
                 CookieOptions co = new CookieOptions{
                     Expires=DateTime.Now.AddHours(1)

@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { register,login } from "./AuthAPI";
 import { parseJwt } from "./AuthUtils";
+import Cookies from "js-cookie";
+
 
 interface Korisnik{
     id : string;
@@ -20,39 +22,50 @@ interface Dostavljac{
     password : string;
 }
 
-interface AuthStateKorisnik {
-    korisnik : Korisnik | null;
+interface AuthState {
+    user: Korisnik | Dostavljac | null;
+    token: string | null;
+    role: string | null;
     loading: boolean;
     error: string | null;
   }
-  interface AuthStateDostavljac {
-    dostavljac : Dostavljac | null;
-    loading: boolean;
-    error: string | null;
-  }
+  const loadUserFromStorage = (): Korisnik | Dostavljac | null => {
+    try {
+       
+        const storedDostavljac = localStorage.getItem("dostavljac");
+        const storedKorisnik = localStorage.getItem("korisnik");
 
-const initialStateKorinsik: AuthStateKorisnik = {
-    korisnik: JSON.parse(localStorage.getItem('korisnik') || 'null'),
-    loading: false,
-    error: null,
-};
+        if (storedDostavljac) return JSON.parse(storedDostavljac);
+        if (storedKorisnik) return JSON.parse(storedKorisnik);
 
-const initialStateDostavljac: AuthStateDostavljac = {
-    dostavljac: JSON.parse(localStorage.getItem('dostavljac') || 'null'),
-    loading: false,
-    error: null,
+        return null;
+    } catch (error) {
+        console.error("Greška pri parsiranju korisnika iz localStorage:", error);
+        return null;
+    }
 };
+  const token = Cookies.get("Token");
+  const role = token ? parseJwt(token)?.role || null : null;
+
+  const initialState: AuthState = {
+    user: loadUserFromStorage(),
+    token: Cookies.get("Token") || null,
+    loading : false,
+    role: role,
+    error: null,
+  };
 
 export const Register = createAsyncThunk(
     'auth/register',
-    async(userData:{id: string, ime: string, prezime: string, brojTelefona: string, username: string, password: string, dostavljac: boolean},{rejectWithValue})=>{
+    async(userData:{id: string, ime: string, prezime: string, brojTelefona: string, username: string, password: string, dostavljacBool: boolean},{rejectWithValue})=>{
         try{
             const data = await register(userData);
-            if(userData.dostavljac==true){
+            if(userData.dostavljacBool==true){
                 localStorage.setItem('dostavljac',JSON.stringify(data));
             }else{
                 localStorage.setItem('korisnik',JSON.stringify(data));
             }
+
             return data;
         }catch(error: any){
             return rejectWithValue(error.response.data.message);
@@ -65,8 +78,8 @@ export const Login = createAsyncThunk(
     async(userData: { username: string, password: string},{rejectWithValue})=>{
         try{
             const data = await login(userData.username,userData.password); 
-            const token = data.token;
-            localStorage.setItem("token", token);
+            
+            const token = Cookies.get("Token") ?? "";
             const decoded = parseJwt(token);
             const role = decoded?.role || "korisnik";
             if(role=="dostavljac"){
@@ -83,15 +96,17 @@ export const Login = createAsyncThunk(
 
 export const authSlice = createSlice({
     name:"auth",
-    initialState:{
-        token: localStorage.getItem("token")||null,
-        loading : false,
-        error: null as string | null,
-    },reducers: {
+    initialState: initialState
+    ,reducers: {
     logout: (state) => {
-      localStorage.removeItem("token");
-      state.loading = false;
-      state.error = null;
+        Cookies.remove("Token");
+        localStorage.removeItem("korisnik");
+        localStorage.removeItem("dostavljac");
+        state.loading = false;
+        state.error = null;
+        state.user = null;
+        state.token = null;
+        state.role = null;
         }
     },
     extraReducers: (builder) => {
@@ -102,13 +117,32 @@ export const authSlice = createSlice({
           })
           .addCase(Login.fulfilled, (state, action) => {
             state.loading = false;
-            state.token = action.payload;
+            state.token = Cookies.get("Token")??"";
+            state.user = action.payload;
+            const decoded = parseJwt(Cookies.get("Token")??"");
+            state.role = decoded?.role || "korisnik";
           })
           .addCase(Login.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
+            
+          })
+          .addCase(Register.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+          })
+          .addCase(Register.fulfilled, (state, action) => {
+            state.loading = false;
+            state.token = Cookies.get("Token")??"";
+            state.user = action.payload;
+            const decoded = parseJwt(Cookies.get("Token")??"");
+            state.role = decoded?.role || "korisnik";
+          })
+          .addCase(Register.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
           });
-      }
-});
+      },
+    });
 
 export default authSlice.reducer;

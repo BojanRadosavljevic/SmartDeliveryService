@@ -125,3 +125,4 @@ C:\Users\bojan\Documents\GitHub\SmartDeliveryService\bin\Debug\net8.0\Microsoft.
 C:\Users\bojan\Documents\GitHub\SmartDeliveryService\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\bojan\Documents\GitHub\SmartDeliveryService\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\bojan\Documents\GitHub\SmartDeliveryService\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\bojan\Documents\GitHub\SmartDeliveryService\obj\Debug\net8.0\SmartDeliveryService.sourcelink.json
