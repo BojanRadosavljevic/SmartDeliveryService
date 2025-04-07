@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { register,login } from "./AuthAPI";
 import { parseJwt } from "./AuthUtils";
 import Cookies from "js-cookie";
@@ -145,4 +145,5 @@ export const authSlice = createSlice({
       },
     });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

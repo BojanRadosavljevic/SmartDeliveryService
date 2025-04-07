@@ -10,4 +10,6 @@ export const BlackLightTheme = styled.div`
   align-items:center;
   flex-direction:column;
   overflow: auto;
+  position: fixed;
+  inset: 0;
 `;

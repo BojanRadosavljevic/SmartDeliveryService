@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Register } from "../Auth/AuthSlice";
 import { AppDispatch } from "../AppStore/store";
+import { parseJwt } from "../Auth/AuthUtils";
+import Cookies from "js-cookie";
 
 
 export function RegisterPage(){
@@ -21,7 +23,11 @@ export function RegisterPage(){
     async function RegisterForm(ev : React.FormEvent){
         ev.preventDefault();
         dispatch(Register({id:"",ime:ime,prezime:prezime,brojTelefona:brojTelefona,username:username,password:password,dostavljacBool:dostavljacBool})).unwrap().then(()=>{
-            navigate("/korisnik");
+                if(parseJwt(Cookies.get("Token")??"")?.role=="korisnik"){
+                    navigate("/korisnik");
+                }else{
+                    navigate("/dostavljac");
+                }
         });
 
     }

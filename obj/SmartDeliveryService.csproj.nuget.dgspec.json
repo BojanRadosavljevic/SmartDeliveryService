@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj": {}
+    "c:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj": {
+    "c:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj",
+        "projectUniqueName": "c:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj",
         "projectName": "SmartDeliveryService",
-        "projectPath": "C:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj",
+        "projectPath": "c:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj",
         "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\obj\\",
+        "outputPath": "c:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config",

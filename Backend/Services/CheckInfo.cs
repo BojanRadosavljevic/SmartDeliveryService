@@ -30,5 +30,15 @@ namespace Services{
            }
            return true;
         }   
+        public static bool ArtikalCheck(string type, string value){
+            if(type != "cena"){
+                if(!string.IsNullOrEmpty(value)) return true;
+                    return false;
+            }else{
+                if(Int32.Parse(value)>0) return true;
+                    return false;
+            }
+
+        }
     }
 }

@@ -11,6 +11,7 @@ export const HeaderDiv = styled.div`
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 5px;
+   
 `;  
 export const headerLink = {
     color:"white",
@@ -19,6 +20,6 @@ export const headerLink = {
     border:"2px solid white",
     borderRadius:"5px",
     paddingLeft: "10px",
-    paddingRight: "10px"
-    }
-;
+    paddingRight: "10px",
+    cursor: "pointer"
+    };

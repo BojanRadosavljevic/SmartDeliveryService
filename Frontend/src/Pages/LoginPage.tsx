@@ -15,13 +15,14 @@ export function LoginPage(){
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
+
    const LoginForma = (ev : React.FormEvent)=>{
         ev.preventDefault();
         dispatch(Login({username:username,password:password})).unwrap().then(()=>{
                     if(parseJwt(Cookies.get("Token")??"")?.role=="korisnik"){
                         navigate("/korisnik");
                     }else{
-                        console.log(parseJwt(Cookies.get("Token")??"").role);
+                        navigate("/dostavljac");
                     }
 
                 });
