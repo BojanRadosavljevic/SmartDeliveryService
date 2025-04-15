@@ -23,4 +23,5 @@ export const KorpaFooter = styled.div`
     border-radius: 5px;
     padding: 2px 50px;
     font: 50x Arial;
+    cursor: pointer;
 `;  

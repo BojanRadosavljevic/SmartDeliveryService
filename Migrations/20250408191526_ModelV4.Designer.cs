@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SmartDeliveryService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408191526_ModelV4")]
+    partial class ModelV4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace SmartDeliveryService.Migrations
                     b.Property<Guid?>("Paketid")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("artikalId")
+                    b.Property<Guid>("artikalid")
                         .HasColumnType("char(36)");
 
                     b.Property<int>("kolicina")
@@ -67,7 +70,7 @@ namespace SmartDeliveryService.Migrations
 
                     b.HasIndex("Paketid");
 
-                    b.HasIndex("artikalId");
+                    b.HasIndex("artikalid");
 
                     b.ToTable("artikliKolicina");
                 });
@@ -127,12 +130,9 @@ namespace SmartDeliveryService.Migrations
 
                     b.Property<string>("username")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("id");
-
-                    b.HasIndex("username")
-                        .IsUnique();
 
                     b.ToTable("dostavljaci");
                 });
@@ -165,12 +165,9 @@ namespace SmartDeliveryService.Migrations
 
                     b.Property<string>("username")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("id");
-
-                    b.HasIndex("username")
-                        .IsUnique();
 
                     b.ToTable("korisnici");
                 });
@@ -202,14 +199,15 @@ namespace SmartDeliveryService.Migrations
                 {
                     b.HasOne("Models.Paket", null)
                         .WithMany("listaArtikala")
-                        .HasForeignKey("Paketid")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Paketid");
 
-                    b.HasOne("Models.Artikal", null)
+                    b.HasOne("Models.Artikal", "artikal")
                         .WithMany()
-                        .HasForeignKey("artikalId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("artikalid")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("artikal");
                 });
 
             modelBuilder.Entity("Models.Dostava", b =>
@@ -217,13 +215,13 @@ namespace SmartDeliveryService.Migrations
                     b.HasOne("Models.Dostavljac", "dostavljac")
                         .WithMany()
                         .HasForeignKey("dostavljacid")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Models.Paket", "paket")
                         .WithMany()
                         .HasForeignKey("paketid")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("dostavljac");

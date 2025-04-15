@@ -1,26 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { register,login } from "./AuthAPI";
 import { parseJwt } from "./AuthUtils";
 import Cookies from "js-cookie";
-
-
-interface Korisnik{
-    id : string;
-    ime : string;
-    prezime : string;
-    brojTelefona : string;
-    adresaZaDostavu : string;
-    username : string;
-    password : string;
-}
-interface Dostavljac{
-    id : string;
-    ime : string;
-    prezime : string;
-    brojTelefona : string;
-    username : string;
-    password : string;
-}
+import { Korisnik } from "../Models/Korisnik";
+import { Dostavljac } from "../Models/Dostavljac";
 
 interface AuthState {
     user: Korisnik | Dostavljac | null;
@@ -100,6 +83,9 @@ export const authSlice = createSlice({
     ,reducers: {
     logout: (state) => {
         Cookies.remove("Token");
+        localStorage.removeItem('cart');
+        localStorage.removeItem('cartPrice');
+        localStorage.removeItem('cartCount');
         localStorage.removeItem("korisnik");
         localStorage.removeItem("dostavljac");
         state.loading = false;
@@ -107,8 +93,17 @@ export const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.role = null;
+        },
+    setUser: (state,action) =>{
+        state.user = action.payload;
+        const role = state.role;
+        if (role === "dostavljac") {
+          localStorage.setItem("dostavljac", JSON.stringify(action.payload));
+        } else {
+            localStorage.setItem("korisnik", JSON.stringify(action.payload));
+          }
         }
-    },
+  },
     extraReducers: (builder) => {
         builder
           .addCase(Login.pending, (state) => {
@@ -145,5 +140,5 @@ export const authSlice = createSlice({
       },
     });
 
-export const { logout } = authSlice.actions;
+export const { logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

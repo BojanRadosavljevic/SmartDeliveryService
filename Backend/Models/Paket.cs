@@ -7,13 +7,13 @@ namespace Models{
         public Guid id { get; set; }
         [Required]
         [JsonIgnore]
-        public List<Artikal>? listaArtikala { get; set; }
+        public List<ArtikalKolicina>? listaArtikala { get; set; }
         [Required]
         public required int cena { get; set; }
         [Required]
         public required string PDFfaktura { get; set; }
         [JsonIgnore]
         [Required]
-        public required Korisnik korisnik { get; set; }
+        public Korisnik korisnik { get; set; }
     }
 }

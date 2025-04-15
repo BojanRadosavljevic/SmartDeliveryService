@@ -8,7 +8,7 @@ import { useState } from "react";
 import { logout } from "../Auth/AuthSlice";
 
 
-export function KorisnikHeader(){
+export function DostavljacHeader(){
     const user = useSelector((state: RootState) => state.auth.user);
     const [isOpen,setIsOpen] = useState(false);
     const dispatch = useDispatch();

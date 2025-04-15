@@ -34,6 +34,7 @@ export const HeaderPlus = styled.div`
     display: flex;
     width: 150px;
     height: 25px;
+    background-color:  #333333;
     border: 3px solid white;
     border-radius: 5px;
     border-top:none;

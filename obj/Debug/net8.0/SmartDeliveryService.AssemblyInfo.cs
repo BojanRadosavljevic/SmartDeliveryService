@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartDeliveryService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e3262c83a8e3090d4714c88b29338dded45614f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adf78ca9f732a0b6409d798070b1fd337f5b3e16")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartDeliveryService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartDeliveryService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

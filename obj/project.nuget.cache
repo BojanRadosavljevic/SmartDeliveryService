@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jmz70i6LJLE=",
+  "dgSpecHash": "rodWYQKuc0g=",
   "success": true,
-  "projectFilePath": "c:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj",
+  "projectFilePath": "C:\\Users\\bojan\\Documents\\GitHub\\SmartDeliveryService\\SmartDeliveryService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bojan\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\bojan\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.3\\microsoft.aspnetcore.authentication.jwtbearer.8.0.3.nupkg.sha512",

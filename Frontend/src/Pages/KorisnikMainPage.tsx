@@ -17,7 +17,6 @@ export function KorisnikMainPage(){
     async function vratiProizvode(){
       const response = await axios.get("http://localhost:5233/Artikal/vratiSveArtikle");
       setArtikli(response.data);
-      console.log(response.data);
     }
     useEffect(() => {
       vratiProizvode();
@@ -32,14 +31,14 @@ export function KorisnikMainPage(){
                 <ArtikalUListi>
                   <img src={`${imagesPath()}${item.slika}`} style={{maxWidth:"25vw",minWidth:"25vw",maxHeight:"15vh",minHeight:"15vh",borderRadius:"5px",objectFit: "fill"}}/>
                   <TestualniDeo>
-                    <text style={{font:"30px Arial"}}>{item.naziv}</text>
-                    <text style={{font:"25px Arial"}}>{item.opis}</text>
-                    <text style={{font:"25px Arial"}}>Cena:  {item.cena} dinara</text>
+                    <text style={{font:"30px Arial",marginLeft:"10px"}}>{item.naziv}</text>
+                    <text style={{font:"25px Arial",marginLeft:"10px"}}>{item.opis}</text>
+                    <text style={{font:"25px Arial",marginLeft:"10px"}}>Cena:  {item.cena} dinara</text>
                   </TestualniDeo>
                   <ButtonDeo>
-                    <ItemsDeo>+</ItemsDeo>
-                    <ItemsDeo>{cart.numberOfProducts}</ItemsDeo>
-                    <ItemsDeo>-</ItemsDeo>
+                    <ItemsDeo onClick={()=>cart.addToCart(item)}>+</ItemsDeo>
+                    <ItemsDeo>{cart.returnNumberOfArtical(item.id)}</ItemsDeo>
+                    <ItemsDeo onClick={()=>cart.removeFromCart(item.id)}>-</ItemsDeo>
                   </ButtonDeo>
                 </ArtikalUListi>
               ))
