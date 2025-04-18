@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SmartDeliveryService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418135422_ModelV7.1")]
+    partial class ModelV71
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,9 +190,6 @@ namespace SmartDeliveryService.Migrations
 
                     b.Property<Guid>("primalacid")
                         .HasColumnType("char(36)");
-
-                    b.Property<bool>("procitana")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("vremePoruke")
                         .HasColumnType("datetime(6)");

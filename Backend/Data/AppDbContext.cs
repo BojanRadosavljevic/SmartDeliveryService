@@ -12,6 +12,7 @@ namespace Data{
         public DbSet<Dostava> dostave { get; set; }
         public DbSet<Dostavljac> dostavljaci { get; set; }
         public DbSet<ArtikalKolicina> artikliKolicina { get; set; }
+        public DbSet<Obavestenja> obavestenja { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -4,21 +4,34 @@ import { HiOutlineFaceSmile } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../AppStore/store";
 import { HiOutlineUser } from "react-icons/hi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logout } from "../Auth/AuthSlice";
+import axios from "axios";
 
 
 export function KorisnikHeader(){
     const user = useSelector((state: RootState) => state.auth.user);
+    const [obavestenja,setObavestenja] = useState([]);
     const [isOpen,setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    async function vratiNeprocitanaObavestenja(){
+        var response = await axios.get("http://localhost:5233/Obavestenje/vratiNeprocitanaObavestenja",{
+            params:{
+                userId:user?.id
+            }
+        });
+        setObavestenja(response.data);
+    }
     function izlogujSe() {
         dispatch(logout());
         navigate('/login');
         return null;
     }
+    useEffect(()=>{
+        vratiNeprocitanaObavestenja();
+    },[]);
     return(
         <div style={{ position: "relative" }}>
             <HeaderDiv>
@@ -43,8 +56,8 @@ export function KorisnikHeader(){
                 <HeaderPlus onClick={()=>{navigate('/podesavanja')}}>
                     Podesavanja
                 </HeaderPlus>
-                <HeaderPlus>
-                    Obavestenja
+                <HeaderPlus onClick={()=>navigate('/obavestenja')}>
+                    Obavestenja{" "+obavestenja.length}
                 </HeaderPlus>
                 <HeaderPlus>
                     Moje dostave

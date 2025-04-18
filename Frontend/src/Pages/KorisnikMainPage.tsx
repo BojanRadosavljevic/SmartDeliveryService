@@ -13,7 +13,7 @@ import { useCart } from "../Providers/CartProvider";
 export function KorisnikMainPage(){
     const [artikli,setArtikli] = useState<Artikal[]>([]);
     const cart = useCart();
-    //const {user,previousPath} = useSelector((state: RootState) => state.auth);
+    const user = useSelector((state: RootState) => state.auth.user);
     async function vratiProizvode(){
       const response = await axios.get("http://localhost:5233/Artikal/vratiSveArtikle");
       setArtikli(response.data);
@@ -22,6 +22,7 @@ export function KorisnikMainPage(){
       vratiProizvode();
       
     }, []);
+    
     return (
       <BlackLightTheme>
         <KorisnikHeader/>

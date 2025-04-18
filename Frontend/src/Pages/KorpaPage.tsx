@@ -6,15 +6,17 @@ import { KorisnikFooter } from "../Outlets/KorisnikFooter";
 import { KorisnikHeader } from "../Outlets/KorisnikHeader";
 import { useCart } from "../Providers/CartProvider";
 import { RootState } from "../AppStore/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSignalR } from "../Providers/SignalRProvider";
 
 export function KorpaPage(){
     const cart = useCart();
     const user = useSelector((state: RootState)=>state.auth.user);
     const [adresaZaDostavu,setAdresaZaDostavu] = useState("");
     const navigate = useNavigate();
+    const { connection } = useSignalR();
 
     async function napraviPaket(){
         const response = await axios.post("http://localhost:5233/Paket/dodajPaket",{
@@ -25,9 +27,25 @@ export function KorpaPage(){
             korisnikId: user?.id
         },{headers:{"Content-Type":"application/json"}});
         cart.clearCart();
-        navigate('/korisnik');
+       
+            if (response.status === 200 && connection?.state === "Connected") {
+                
+                await connection.invoke("SendNotification", user?.id, "📦 Vaša dostava je uspešno spakovana!");
+                const response2 = await axios.post("http://localhost:5233/Obavestenje/postaviObavestenje",null,{
+                    params:{
+                        userId: user?.id,
+                        message: "📦 Vaša dostava je uspešno spakovana!"
+                    }
+                });
+                console.log(response2.data);
+                navigate('/korisnik');
+            }
     };
-
+    useEffect(() => {
+        if (connection && connection.state !== "Connected") {
+          connection.start().catch(err => console.error("Greška:", err));
+        }
+      }, [connection]);
     return(<BlackLightTheme>
         <KorisnikHeader/>
         <PocetniDiv>

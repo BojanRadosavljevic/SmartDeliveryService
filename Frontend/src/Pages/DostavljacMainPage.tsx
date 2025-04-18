@@ -6,12 +6,13 @@ import axios from "axios";
 import { PaketInfo } from "../Models/PaketInfo";
 import { useSelector } from "react-redux";
 import { RootState } from "../AppStore/store";
-import { connection } from "../Signalr";
+import { useSignalR } from "../Providers/SignalRProvider";
 
 export function DostavljacMainPage(){
     const user = useSelector((state: RootState)=>state.auth.user);
     const [tip,setTip] = useState<number>(2);
     const [paketi,setPaketi] = useState<PaketInfo[]>([]);
+    const {connection} = useSignalR();
 
     async function vratiPaketeBezDostave(){
         const response = await axios.get("http://localhost:5233/Paket/vratiPaketeBezDostave");
@@ -26,7 +27,7 @@ export function DostavljacMainPage(){
               },
             });
         
-            if (response.status === 200 && connection.state === "Connected") {
+            if (response.status === 200 && connection?.state === "Connected") {
               await connection.invoke("SendNotification", item.idKorisnika, "📦 Vaša dostava je uspešno preuzeta!");
               window.location.reload();
             }

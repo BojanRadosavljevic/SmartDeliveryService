@@ -9,39 +9,9 @@ import { DostavljacMainPage } from './Pages/DostavljacMainPage'
 import { CartProvider } from './Providers/CartProvider'
 import { KorpaPage } from './Pages/KorpaPage'
 import { PodesavanjaPage } from './Pages/PodesavanjaPage'
-import { useEffect } from 'react'
-import { connection } from './Signalr'
-import { showNotification } from './Notifications'
+import { ObavestenjaPage } from './Pages/ObavestenjaPage'
 
 function App() {
-  useEffect(() => {
-
-    if (Notification.permission === "granted") {
-      console.log("Notifikacije su omogućene!");
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          console.log("Korisnik je dozvolio notifikacije!");
-        }
-      });
-    }
-    if (connection.state === "Disconnected") {
-      connection
-        .start()
-        .then(() => {
-          console.log("✅ SignalR konekcija uspostavljena");
-
-          connection.on("ReceiveNotification", (message: string) => {
-            console.log("📨 Poruka primljena:", message);
-            showNotification("📢 Nova notifikacija: " + message);
-          });
-          
-        })
-        .catch((err) =>
-          console.error("❌ Greška pri SignalR konekciji:", err)
-        );
-    }
-  },[]);
   return (
     <>
     <Routes>
@@ -50,6 +20,7 @@ function App() {
       <Route path="/register" element={<ProtectedRoute><RegisterPage/></ProtectedRoute>}/>
       <Route path="/korisnik" element={ <CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><KorisnikMainPage/></ProtectedRoute> </CartProvider>}/>
       <Route path="/podesavanja" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik","dostavljac"]}><PodesavanjaPage/></ProtectedRoute></CartProvider>}/>
+      <Route path="/obavestenja" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik","dostavljac"]}><ObavestenjaPage/></ProtectedRoute></CartProvider>}/>
       <Route path="/korpa" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><KorpaPage/></ProtectedRoute> </CartProvider>}/>
       <Route path="/dostavljac" element={<ProtectedRoute allowedRoles={["dostavljac"]}><DostavljacMainPage/></ProtectedRoute>}/>
     </Routes>
