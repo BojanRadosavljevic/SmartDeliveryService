@@ -5,5 +5,6 @@ export interface PaketInfo{
     id: string,
     ime: string,
     pdFfaktura: string,
+    idKorisnika: string,
     prezime: string
 }

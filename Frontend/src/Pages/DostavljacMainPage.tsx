@@ -4,14 +4,35 @@ import { DugmeDiv, NaslovniDiv, StartniDiv } from "../CSSComponents/DostavljacPa
 import { DostavljacHeader } from "../Outlets/DostavljacHeader";
 import axios from "axios";
 import { PaketInfo } from "../Models/PaketInfo";
+import { useSelector } from "react-redux";
+import { RootState } from "../AppStore/store";
+import { connection } from "../Signalr";
 
 export function DostavljacMainPage(){
+    const user = useSelector((state: RootState)=>state.auth.user);
     const [tip,setTip] = useState<number>(2);
     const [paketi,setPaketi] = useState<PaketInfo[]>([]);
 
     async function vratiPaketeBezDostave(){
         const response = await axios.get("http://localhost:5233/Paket/vratiPaketeBezDostave");
         setPaketi(response.data);
+    }
+    async function prihvatiPaket(item: PaketInfo){
+        try {
+            const response = await axios.post("http://localhost:5233/Dostava/napraviDostavu", null, {
+              params: {
+                paketId: item.id,
+                dostavljacId: user?.id,
+              },
+            });
+        
+            if (response.status === 200 && connection.state === "Connected") {
+              await connection.invoke("SendNotification", item.idKorisnika, "📦 Vaša dostava je uspešno preuzeta!");
+              window.location.reload();
+            }
+          } catch (error) {
+            console.error("❌ Greška prilikom prihvatanja paketa:", error);
+          }
     }
     useEffect(()=>{
         vratiPaketeBezDostave();
@@ -36,7 +57,7 @@ export function DostavljacMainPage(){
                             </div>
                         </div>
                         <div>
-                            <button>Prihvati paket</button>
+                            <button onClick={()=>prihvatiPaket(item)}>Prihvati paket</button>
                         </div>
                     </div>))}</div>
             </>)

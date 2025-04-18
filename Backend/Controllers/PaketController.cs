@@ -49,6 +49,7 @@ namespace Controllers{
                 p.id,
                 p.cena,
                 p.PDFfaktura,
+                idKorisnika = p.korisnik.id,
                 p.korisnik.ime,
                 p.korisnik.prezime,
                 p.korisnik.brojTelefona,
