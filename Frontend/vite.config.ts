@@ -8,6 +8,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      includeAssets: ['favicon.ico', 'robots.txt', 'web-app-manifest-192x192.png', 'web-app-manifest-512x512.png'],
       manifest: {
         name: 'Moja PWA Aplikacija',
         short_name: 'PWA',

@@ -10,6 +10,7 @@ import { CartProvider } from './Providers/CartProvider'
 import { KorpaPage } from './Pages/KorpaPage'
 import { PodesavanjaPage } from './Pages/PodesavanjaPage'
 import { ObavestenjaPage } from './Pages/ObavestenjaPage'
+import { PaketiPage } from './Pages/PaketiPage'
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
       <Route path="/register" element={<ProtectedRoute><RegisterPage/></ProtectedRoute>}/>
       <Route path="/korisnik" element={ <CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><KorisnikMainPage/></ProtectedRoute> </CartProvider>}/>
       <Route path="/podesavanja" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik","dostavljac"]}><PodesavanjaPage/></ProtectedRoute></CartProvider>}/>
-      <Route path="/obavestenja" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik","dostavljac"]}><ObavestenjaPage/></ProtectedRoute></CartProvider>}/>
+      <Route path="/obavestenja" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><ObavestenjaPage/></ProtectedRoute></CartProvider>}/>
+      <Route path="/paketi" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><PaketiPage/></ProtectedRoute></CartProvider>}/>
       <Route path="/korpa" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><KorpaPage/></ProtectedRoute> </CartProvider>}/>
       <Route path="/dostavljac" element={<ProtectedRoute allowedRoles={["dostavljac"]}><DostavljacMainPage/></ProtectedRoute>}/>
     </Routes>

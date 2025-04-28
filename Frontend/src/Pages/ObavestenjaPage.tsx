@@ -43,7 +43,7 @@ export function ObavestenjaPage(){
     }
     function vratiDatum(datum : Date){
         const datuma = new Date(datum);
-        return datuma.getDate()+"."+datuma.getMonth()+"."+datuma.getFullYear();
+        return datuma.getDate()+"."+(datuma.getMonth()+1)+"."+datuma.getFullYear();
     }
     useEffect(()=>{
         vratiObavestenja();

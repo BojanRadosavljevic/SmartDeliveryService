@@ -37,7 +37,6 @@ export function KorpaPage(){
                         message: "📦 Vaša dostava je uspešno spakovana!"
                     }
                 });
-                console.log(response2.data);
                 navigate('/korisnik');
             }
     };

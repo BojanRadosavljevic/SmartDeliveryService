@@ -56,5 +56,20 @@ namespace Controllers{
                 p.korisnik.adresaZaDostavu}).ToListAsync();
             return Ok(paketiBezDostave);
         }
+        [HttpGet]
+        [Route("vratiPaketeBezDostaveUsera")]
+        public async Task<ActionResult<Paket>> vratiPaketeBezDostaveUsera(string idKorisnika){
+            var paketiSaDostavom = await context.dostave.Where(d=>d.paket!=null && d.paket.korisnik.id.ToString()==idKorisnika).Select(d=>d.paket.id).ToListAsync();
+            var paketiBezDostave = await context.paketi.Where(p => !paketiSaDostavom.Contains(p.id)).Select(p=>new{
+                p.id,
+                p.cena,
+                p.PDFfaktura,
+                idKorisnika = p.korisnik.id,
+                p.korisnik.ime,
+                p.korisnik.prezime,
+                p.korisnik.brojTelefona,
+                p.korisnik.adresaZaDostavu}).ToListAsync();
+            return Ok(paketiBezDostave);
+        }
     }
 }

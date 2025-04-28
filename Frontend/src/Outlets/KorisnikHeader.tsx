@@ -10,7 +10,7 @@ import axios from "axios";
 
 
 export function KorisnikHeader(){
-    const user = useSelector((state: RootState) => state.auth.user);
+    const {user,role} = useSelector((state: RootState) => state.auth);
     const [obavestenja,setObavestenja] = useState([]);
     const [isOpen,setIsOpen] = useState(false);
     const dispatch = useDispatch();
@@ -56,11 +56,11 @@ export function KorisnikHeader(){
                 <HeaderPlus onClick={()=>{navigate('/podesavanja')}}>
                     Podesavanja
                 </HeaderPlus>
-                <HeaderPlus onClick={()=>navigate('/obavestenja')}>
+                {role==="korisnik"?(<HeaderPlus onClick={()=>navigate('/obavestenja')}>
                     Obavestenja{" "+obavestenja.length}
-                </HeaderPlus>
-                <HeaderPlus>
-                    Moje dostave
+                </HeaderPlus>):("")}
+                <HeaderPlus onClick={()=>navigate('/paketi')}>
+                    Dostave
                 </HeaderPlus>
                 <HeaderPlus onClick={()=>izlogujSe()}>
                     Izloguj se

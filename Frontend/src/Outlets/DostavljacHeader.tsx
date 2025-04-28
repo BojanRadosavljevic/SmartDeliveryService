@@ -44,9 +44,6 @@ export function DostavljacHeader(){
                     Podesavanja
                 </HeaderPlus>
                 <HeaderPlus>
-                    Obavestenja
-                </HeaderPlus>
-                <HeaderPlus>
                     Moje dostave
                 </HeaderPlus>
                 <HeaderPlus onClick={()=>izlogujSe()}>
