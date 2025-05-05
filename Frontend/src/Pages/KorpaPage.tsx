@@ -19,7 +19,7 @@ export function KorpaPage(){
     const { connection } = useSignalR();
 
     async function napraviPaket(){
-        const response = await axios.post("http://localhost:5233/Paket/dodajPaket",{
+        const response = await axios.post(`http://${window.location.hostname}:5233/Paket/dodajPaket`,{
             listaArtikala: cart.cart,
             cena: cart.price,
             PDFfaktura: "a",
@@ -31,7 +31,7 @@ export function KorpaPage(){
             if (response.status === 200 && connection?.state === "Connected") {
                 
                 await connection.invoke("SendNotification", user?.id, "📦 Vaša dostava je uspešno spakovana!");
-                const response2 = await axios.post("http://localhost:5233/Obavestenje/postaviObavestenje",null,{
+                const response2 = await axios.post(`http://${window.location.hostname}:5233/Obavestenje/postaviObavestenje`,null,{
                     params:{
                         userId: user?.id,
                         message: "📦 Vaša dostava je uspešno spakovana!"

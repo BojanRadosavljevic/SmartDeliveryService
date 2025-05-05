@@ -43,7 +43,7 @@ export function DostavljacHeader(){
                 <HeaderPlus onClick={()=>{navigate('/podesavanja')}}>
                     Podesavanja
                 </HeaderPlus>
-                <HeaderPlus>
+                <HeaderPlus onClick={()=>navigate('/dostave')}>
                     Moje dostave
                 </HeaderPlus>
                 <HeaderPlus onClick={()=>izlogujSe()}>

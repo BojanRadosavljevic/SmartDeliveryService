@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = `http://localhost:5233/Auth`;
+const API_URL = `http://${window.location.hostname}:5233/Auth`;
 
 export const register = async (userData:{id: string, ime: string, prezime: string, brojTelefona: string, username: string, password: string, dostavljacBool: boolean})=>{
-    const response = await axios.post("http://localhost:5233/Auth/Register", userData
+    const response = await axios.post(`http://${window.location.hostname}:5233/Auth/Register`, userData
 ,  { withCredentials: true  ,headers: { "Content-Type": "application/json" }});
     return response.data;
 };

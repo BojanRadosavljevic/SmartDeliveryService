@@ -29,7 +29,7 @@ export const SignalRProvider : React.FC<{children : React.ReactNode}> = ({childr
           }
 
         const newConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`http://localhost:5233/notificationHub?userId=${user?.id}`, {
+            .withUrl(`http://${window.location.hostname}:5233/notificationHub?userId=${user?.id}`, {
                 withCredentials: true,
             })
             .withAutomaticReconnect()

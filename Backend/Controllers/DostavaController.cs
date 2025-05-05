@@ -24,7 +24,7 @@ namespace Controllers{
             if(dostavljaca==null){
                 return BadRequest("Ne postojeci dostavljac");
             }
-            var dost = await context.dostave.Where(x=>x.dostavljac==dostavljaca).FirstOrDefaultAsync();
+            var dost = await context.dostave.Where(x=>x.dostavljac==dostavljaca && x.status!=Status.Zatvoreno).FirstOrDefaultAsync();
             if(dost != null){
                 return BadRequest("Dostavljac vec ima dostavu");
             }
@@ -49,7 +49,7 @@ namespace Controllers{
             if(dostavljac == null){
                 return BadRequest("ne postoji dostavljac sa tim id-ijem");
             }
-            var dostava = await context.dostave.Where(x=>x.dostavljac==dostavljac).Select(d=>new{
+            var dostava = await context.dostave.Where(x=>x.dostavljac==dostavljac && x.status!=Status.Zatvoreno).Select(d=>new{
                 d.id,
                 d.status,
                 d.PNGPotpisa,
@@ -141,6 +141,52 @@ namespace Controllers{
             }).ToListAsync();
             return Ok(listaDostava);
 
+        }
+        [HttpGet]
+        [Route("vratiDostaveDostavljaca")]
+        public async Task<ActionResult<List<Dostava>>> vratiDostaveDostavljaca(string idDostavljaca){
+            var dostavljac = await context.dostavljaci.Where(x=>x.id.ToString()==idDostavljaca).FirstOrDefaultAsync();
+            if(dostavljac==null){
+                return BadRequest("Ne postojeci korisnik");
+            }
+            var listaDostava = await context.dostave.Where(x=>x.dostavljac==dostavljac).OrderBy(x=>x.vremeDostave).Select(d=>new{
+                d.id,
+                d.status,
+                d.PNGPotpisa,
+                d.paket.PDFfaktura,
+                d.paket.cena,
+                idKorisnika = d.paket.korisnik.id,
+                d.paket.korisnik.ime,
+                d.paket.korisnik.prezime,
+                d.paket.korisnik.brojTelefona,
+                d.paket.korisnik.adresaZaDostavu,
+            }).ToListAsync();
+            return Ok(listaDostava);
+        }
+        [HttpPut]
+        [Route("zatvoriDostavu")]
+        public async Task<ActionResult<Dostava>> zatvoriDostavu([FromForm]string signature,[FromForm]string id){
+            var dostava = await context.dostave.Where(x=>x.id.ToString()==id && x.status==Status.Dostavljeno).FirstOrDefaultAsync();
+            if (string.IsNullOrWhiteSpace(signature))
+                return BadRequest("Potpis je prazan.");
+
+            var base64 = signature.Split(',')[1];
+            var bytes = Convert.FromBase64String(base64);
+            var fileName = Guid.NewGuid() + ".png";
+            var folder = Path.Combine(Directory.GetCurrentDirectory(), "Backend", "Images", "Potpisi");
+
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            var path = Path.Combine(folder, fileName);
+            await System.IO.File.WriteAllBytesAsync(path, bytes);
+
+            dostava.PNGPotpisa = fileName;
+            dostava.status = Status.Zatvoreno;
+            context.dostave.Update(dostava);
+            await context.SaveChangesAsync();
+            
+            return Ok("Zatvorena dostava");
         }
     }
 }

@@ -15,7 +15,7 @@ export function KorisnikMainPage(){
     const cart = useCart();
     const user = useSelector((state: RootState) => state.auth.user);
     async function vratiProizvode(){
-      const response = await axios.get("http://localhost:5233/Artikal/vratiSveArtikle");
+      const response = await axios.get(`http://${window.location.hostname}:5233/Artikal/vratiSveArtikle`);
       setArtikli(response.data);
     }
     useEffect(() => {

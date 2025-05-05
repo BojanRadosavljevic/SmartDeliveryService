@@ -11,6 +11,8 @@ import { KorpaPage } from './Pages/KorpaPage'
 import { PodesavanjaPage } from './Pages/PodesavanjaPage'
 import { ObavestenjaPage } from './Pages/ObavestenjaPage'
 import { PaketiPage } from './Pages/PaketiPage'
+import { CanvasPage } from './Pages/CanvasPage'
+import { DostavePage } from './Pages/DostavePage'
 
 function App() {
   return (
@@ -24,7 +26,9 @@ function App() {
       <Route path="/obavestenja" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><ObavestenjaPage/></ProtectedRoute></CartProvider>}/>
       <Route path="/paketi" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><PaketiPage/></ProtectedRoute></CartProvider>}/>
       <Route path="/korpa" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><KorpaPage/></ProtectedRoute> </CartProvider>}/>
+      <Route path="/canvas" element={<CartProvider><ProtectedRoute allowedRoles={["korisnik"]}><CanvasPage/></ProtectedRoute> </CartProvider>}/>
       <Route path="/dostavljac" element={<ProtectedRoute allowedRoles={["dostavljac"]}><DostavljacMainPage/></ProtectedRoute>}/>
+      <Route path="/dostave" element={<ProtectedRoute allowedRoles={["dostavljac"]}><DostavePage/></ProtectedRoute>}/>
     </Routes>
     </>
   )

@@ -24,7 +24,7 @@ export function PodesavanjaPage(){
     const [adresaZaDostavu,setAdresaZaDostavu] = useState("");
 
     async function izmeniUsera(){
-        const response = await axios.put("http://localhost:5233/User/izmeniUsera",{
+        const response = await axios.put(`http://${window.location.hostname}:5233/User/izmeniUsera`,{
             id: user?.id,
             ime: ime?ime:user?.ime,
             prezime: prezime?prezime:user?.prezime,
@@ -42,7 +42,7 @@ export function PodesavanjaPage(){
         }
     };
     async function obrisiUsera(){
-        const response =  await axios.delete("http://localhost:5233/User/obrisiUsera",{params:{
+        const response =  await axios.delete(`http://${window.location.hostname}:5233/User/obrisiUsera`,{params:{
             userId: user?.id
         }});
         cart.clearCart();

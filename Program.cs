@@ -23,8 +23,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "http://localhost:5233",
-            ValidAudience = "http://localhost:5233",
+            ValidIssuer = $"http://{builder.Configuration["App:Host"] ?? "localhost:5233"}",
+            ValidAudience = $"http://{builder.Configuration["App:Host"] ?? "localhost:5233"}",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secure-secret-key-that-is-32-bytes-long"))
         };
     });
@@ -33,7 +33,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
-        policy.WithOrigins("http://localhost:5173") // Adresa React aplikacije
+        policy.WithOrigins( "http://localhost:5173",
+            "http://192.168.1.53:5173",
+            "https://192.168.1.53:5173" ) // Adresa React aplikacije
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()); 

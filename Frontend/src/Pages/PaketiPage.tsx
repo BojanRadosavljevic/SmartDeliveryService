@@ -12,22 +12,25 @@ import { PaketInfo } from "../Models/PaketInfo";
 import { fakturePath } from "../assets/Paths";
 import { ImageModal } from "../Modals/ImageModals";
 import { Status } from "../assets/Status";
+import { useNavigate } from "react-router-dom";
 
 export function PaketiPage(){
     const user = useSelector((state:RootState)=>state.auth.user);
     const [paketi,setPaketi] = useState<PaketInfo[]>([]);
     const [dostave,setDostave] = useState<DostavaDTO[]>([]);
     const [selected,setSelected] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
     const [showModal,setShowModal] = useState(false);
+    const navigate = useNavigate();
 
     async function vratiPaketeIDostave(){
-        var response = await axios.get("http://localhost:5233/Paket/vratiPaketeBezDostaveUsera",{
+        var response = await axios.get(`http://${window.location.hostname}:5233/Paket/vratiPaketeBezDostaveUsera`,{
             params:{
                 idKorisnika:user?.id
             }
         });
         setPaketi(response.data);
-        var response2 = await axios.get("http://localhost:5233/Dostava/vratiDostaveKorisnika",{
+        var response2 = await axios.get(`http://${window.location.hostname}:5233/Dostava/vratiDostaveKorisnika`,{
             params:{
                 idKorisnika:user?.id
             }
@@ -35,8 +38,13 @@ export function PaketiPage(){
         setDostave(response2.data);
         console.log(dostave);
     }
+    function potpisiDostavu(id : string){
+        localStorage.setItem("canvasId",id);
+        navigate('/canvas');
+    }
     useEffect(()=>{
         vratiPaketeIDostave();
+        localStorage.setItem("canvasId","");
     },[]);
 
     return(<BlackLightTheme>
@@ -54,9 +62,9 @@ export function PaketiPage(){
                             (<ItemDiv>
                                 
                                 <div>   
-                                    <SlikaDiv src={`${fakturePath}${items.pdFfaktura}`} onClick={()=>{setShowModal(!showModal)}} />
+                                    <SlikaDiv src={`${fakturePath}${items.pdFfaktura}`} onClick={()=>{setSelectedImageUrl(fakturePath()+items.pdFfaktura); setShowModal(!showModal)}} />
                                 </div>
-                                {showModal && <ImageModal imageUrl={`${fakturePath()}${items.pdFfaktura}`} onClose={()=>setShowModal(false)}/>}
+                                {showModal && <ImageModal imageUrl={selectedImageUrl} onClose={()=>setShowModal(false)}/>}
                                 <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between"}}>
                                     <div>{items.ime} {items.prezime}, {items.adresaZaDostavu}, {items.brojTelefona}, SPAKOVAN</div>
                                     <div>{items.cena} dinara </div>
@@ -70,12 +78,12 @@ export function PaketiPage(){
                     <NaslovniDiv>DOSTAVE</NaslovniDiv>
                     <div>
                     {dostave.map((items)=>
-                            (<ItemDiv>
+                            (<ItemDiv onDoubleClick={()=>{if(items.status!==3)potpisiDostavu(items.id)}}>
                                 
                                 <div>   
-                                    <SlikaDiv src={`${fakturePath()}${items.pdFfaktura}`} onClick={()=>{setShowModal(!showModal)}} />
+                                    <SlikaDiv src={`${fakturePath()}${items.pdFfaktura}`} onClick={()=>{setSelectedImageUrl(fakturePath()+items.pdFfaktura); setShowModal(!showModal)}} />
                                 </div>
-                                 {showModal && <ImageModal imageUrl={`${fakturePath()}${items.pdFfaktura}`} onClose={()=>setShowModal(false)}/>}
+                                 {showModal && <ImageModal imageUrl={selectedImageUrl} onClose={()=>setShowModal(false)}/>}
                                 <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",marginLeft:"10px"}}>
                                     <div>{items.ime} {items.prezime}, {items.adresaZaDostavu}, {items.brojTelefona},  {Status(items.status)?.toUpperCase()}</div>
                                     <div>{items.cena} dinara</div>

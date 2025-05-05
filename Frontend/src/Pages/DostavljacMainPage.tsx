@@ -19,15 +19,16 @@ export function DostavljacMainPage(){
     const [dostava,setDostava] = useState<DostavaDTO | string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [showModal,setShowModal] = useState(false);
+     const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
     const {connection} = useSignalR();
 
     async function vratiPaketeBezDostave(){
-        const response = await axios.get("http://localhost:5233/Paket/vratiPaketeBezDostave");
+        const response = await axios.get(`http://${window.location.hostname}:5233/Paket/vratiPaketeBezDostave`);
         setPaketi(response.data);
     }
     async function prihvatiPaket(item: PaketInfo){
         try {
-            const response = await axios.post("http://localhost:5233/Dostava/napraviDostavu", null, {
+            const response = await axios.post(`http://${window.location.hostname}:5233/Dostava/napraviDostavu`, null, {
               params: {
                 paketId: item.id,
                 dostavljacId: user?.id,
@@ -36,7 +37,7 @@ export function DostavljacMainPage(){
         
             if (response.status === 200 && connection?.state === "Connected") {
               await connection.invoke("SendNotification", item.idKorisnika, "📦 Vaša dostava je uspešno preuzeta!");
-              await axios.post("http://localhost:5233/Obavestenje/postaviObavestenje",null,{
+              await axios.post(`http://${window.location.hostname}:5233/Obavestenje/postaviObavestenje`,null,{
                 params:{
                     userId: item.idKorisnika,
                     message: "📦 Vaša dostava je uspešno preuzeta!"
@@ -49,14 +50,14 @@ export function DostavljacMainPage(){
           }
     }
     async function vratiTrenutnuDostavu(){
-        var response = await axios.get("http://localhost:5233/Dostava/vratiTrenutnuDostavu",{params:{
+        var response = await axios.get(`http://${window.location.hostname}:5233/Dostava/vratiTrenutnuDostavu`,{params:{
             idDostavljaca : user?.id
         }});
         setDostava(response.data);
     }
     async function otkaziDostavu(){
         if(typeof dostava !== "string" && dostava!=null && Status(dostava.status)!=="Preuzeto"){
-            var response = await axios.delete("http://localhost:5233/Dostava/otkaziDostavu",{
+            var response = await axios.delete(`http://${window.location.hostname}:5233/Dostava/otkaziDostavu`,{
                 params:{
                     idDostave : dostava.id
                 }
@@ -64,7 +65,7 @@ export function DostavljacMainPage(){
            
             if (response.status === 200 && connection?.state === "Connected") {
                 await connection.invoke("SendNotification", dostava.idKorisnika, "📦 Vaša dostava je otkazana!");
-                await axios.post("http://localhost:5233/Obavestenje/postaviObavestenje",null,{
+                await axios.post(`http://${window.location.hostname}:5233/Obavestenje/postaviObavestenje`,null,{
                   params:{
                       userId: dostava.idKorisnika,
                       message: "📦 Vaša dostava je otkazana!"
@@ -76,7 +77,7 @@ export function DostavljacMainPage(){
     }
     async function izvrsiDostavu(){
         if(typeof dostava !== "string" && dostava!=null){
-            var response = await axios.put("http://localhost:5233/Dostava/izvrsiDostavu",null,{
+            var response = await axios.put(`http://${window.location.hostname}:5233/Dostava/izvrsiDostavu`,null,{
                 params:{
                     idDostave : dostava.id
                 }
@@ -84,7 +85,7 @@ export function DostavljacMainPage(){
 
             if (response.status === 200 && connection?.state === "Connected") {
                 await connection.invoke("SendNotification", dostava.idKorisnika, "📦 Vaša dostava je izvršena!");
-                await axios.post("http://localhost:5233/Obavestenje/postaviObavestenje",null,{
+                await axios.post(`http://${window.location.hostname}:5233/Obavestenje/postaviObavestenje`,null,{
                   params:{
                       userId: dostava.idKorisnika,
                       message: "📦 Vaša dostava je izvršena!"
@@ -107,7 +108,7 @@ export function DostavljacMainPage(){
           
             formData.append("slika",file);
             try{
-                const response = await axios.post("http://localhost:5233/Dostava/UploadSlike", formData, {
+                const response = await axios.post(`http://${window.location.hostname}:5233/Dostava/UploadSlike`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -155,7 +156,7 @@ export function DostavljacMainPage(){
                 (<div>
                     <SlikaStatusDiv>
                         {dostava.pdFfaktura!=="a"?
-                        ( <SlikaImg src={`${fakturePath()}${dostava.pdFfaktura}`}  onClick={()=>{setShowModal(!showModal)}} />):
+                        ( <SlikaImg src={`${fakturePath()}${dostava.pdFfaktura}`}onClick={()=>{setSelectedImageUrl(fakturePath()+dostava.pdFfaktura); setShowModal(!showModal)}}/>):
                         (<div>
                             <HiArrowUpTray style={{marginLeft: "20px",border:"1px dotted white",borderRadius:"3px",cursor:"pointer",padding:"2px"}} size={30} onClick={handleClick}/>
                             <input type="file" accept="image/*" ref={inputRef} style={{ display: "none" }} onChange={uploadFakture}/>
@@ -163,7 +164,7 @@ export function DostavljacMainPage(){
                         <h3 style={{marginRight: "20px"}}>{Status(dostava.status)?.toUpperCase()}</h3>
                     </SlikaStatusDiv>
                     {showModal && 
-                    <ImageModal imageUrl={`${fakturePath()}${dostava.pdFfaktura}`} onClose={()=>setShowModal(false)}/>}
+                    <ImageModal imageUrl={selectedImageUrl} onClose={()=>setShowModal(false)}/>}
                     <InfoDiv>
                         <InfoDiv2>
                             <InfoLabel>Ime:</InfoLabel>

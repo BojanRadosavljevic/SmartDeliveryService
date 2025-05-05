@@ -17,7 +17,7 @@ export function KorisnikHeader(){
     const navigate = useNavigate();
 
     async function vratiNeprocitanaObavestenja(){
-        var response = await axios.get("http://localhost:5233/Obavestenje/vratiNeprocitanaObavestenja",{
+        var response = await axios.get(`http://${window.location.hostname}:5233/Obavestenje/vratiNeprocitanaObavestenja`,{
             params:{
                 userId:user?.id
             }

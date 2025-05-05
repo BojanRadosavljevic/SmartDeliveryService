@@ -1,12 +1,12 @@
 export function Status(id : number){
     switch(id){
-        case 1:
+        case 0:
             return "Spakovano";
-        case 2:
+        case 1:
             return "Preuzeto";
+        case 2:
+            return "Dostavljeno";
         case 3:
-            return "Dozvoljeno";
-        case 4:
             return "Zatvoreno";
     }
 }

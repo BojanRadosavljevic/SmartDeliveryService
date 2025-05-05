@@ -15,7 +15,7 @@ export function ObavestenjaPage(){
     const [obavestenja,setObavestenja] = useState<Obavestenje[]>([]);
     
     async function vratiObavestenja(){
-        var response = await axios.get("http://localhost:5233/Obavestenje/vratiObavestenja",{
+        var response = await axios.get(`http://${window.location.hostname}:5233/Obavestenje/vratiObavestenja`,{
             params:{
                 userId:user?.id
             }
@@ -24,7 +24,7 @@ export function ObavestenjaPage(){
     }
     async function prebaciUProcitana(){
         console.log("a");
-        var response = await axios.put("http://localhost:5233/Obavestenje/procitajObavestenja",null,{
+        var response = await axios.put(`http://${window.location.hostname}:5233/Obavestenje/procitajObavestenja`,null,{
             params:{
                 userId:user?.id
             }
@@ -33,7 +33,7 @@ export function ObavestenjaPage(){
         setObavestenja(response.data);
     }
     async function obrisiObavestenja(){
-        var response = await axios.delete("http://localhost:5233/Obavestenje/obrisiObavestenja",{
+        var response = await axios.delete(`http://${window.location.hostname}:5233/Obavestenje/obrisiObavestenja`,{
             params:{
                 userId:user?.id
             }
