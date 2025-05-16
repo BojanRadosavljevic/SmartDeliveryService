@@ -33,9 +33,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
-        policy.WithOrigins( "http://localhost:5173",
-            "http://192.168.1.53:5173",
-            "https://192.168.1.53:5173" ) // Adresa React aplikacije
+        policy.SetIsOriginAllowed(origin => true ) // Adresa React aplikacije
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()); 
